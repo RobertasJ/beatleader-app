@@ -5,9 +5,9 @@ use crate::prelude::*;
 pub fn LeaderboardPage(id: LeaderboardId) -> impl IntoElement {
     let leaderboard_query = use_query(Query::new(id, FetchLeaderboard));
 
-    rect().map(leaderboard_query.read().state().ok(), |el, leaderboard| {
-        el.child(SongCard::new(leaderboard.song.clone()))
-    })
+    unquery(leaderboard_query)
+        .map_ok(|leaderboard| rect().child(SongCard::new(leaderboard.song.clone())))
+        .unwrap_or(rect())
 }
 
 #[component]

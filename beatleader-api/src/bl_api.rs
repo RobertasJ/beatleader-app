@@ -1,5 +1,4 @@
 use log::{debug, trace};
-use moka::future::Cache;
 use oauth2::AccessToken;
 use objects::*;
 use reqwest::{Client, IntoUrl, Method, RequestBuilder};
@@ -48,12 +47,10 @@ impl BlApi {
 
     async fn send_api<T: DeserializeOwned>(method: Method, url: impl IntoUrl) -> Result<T> {
         let text = Self::new(method, url).send().await?.text().await?;
-        Ok(
-            serde_json::from_str(&text).map_err(|err| crate::Error::Deserialization {
-                error: err,
-                text: text,
-            })?,
-        )
+        let deserializer = &mut serde_json::Deserializer::from_str(&text);
+        let result = serde_path_to_error::deserialize(deserializer);
+
+        Ok(result.map_err(|err| crate::Error::Deserialization { error: err })?)
     }
 
     async fn send_api_authed<T: DeserializeOwned>(method: Method, url: impl IntoUrl) -> Result<T> {
@@ -64,12 +61,11 @@ impl BlApi {
             .await?
             .text()
             .await?;
-        Ok(
-            serde_json::from_str(&text).map_err(|err| crate::Error::Deserialization {
-                error: err,
-                text: text,
-            })?,
-        )
+
+        let deserializer = &mut serde_json::Deserializer::from_str(&text);
+        let result = serde_path_to_error::deserialize(deserializer);
+
+        Ok(result.map_err(|err| crate::Error::Deserialization { error: err })?)
     }
 
     async fn authenticate(mut self) -> Self {

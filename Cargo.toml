@@ -15,9 +15,6 @@ freya = { git = "https://github.com/marc2332/freya", features = [
     "remote-asset",
     "icons",
 ] }
-freya-icons = { git = "https://github.com/marc2332/freya", features = [
-    "lucide",
-] }
 directories = "6.0.0"
 moka = { version = "0.12", features = ["future"] }
 keyring = "4.1"

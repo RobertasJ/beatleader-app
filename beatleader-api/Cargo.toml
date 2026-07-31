@@ -18,3 +18,4 @@ serde_with = "3.21.0"
 keyring.workspace = true
 moka.workspace = true
 beatleader-auth = { workspace = true }
+serde_path_to_error = "0.1.20"

@@ -1,4 +1,5 @@
 use reqwest::StatusCode;
+use serde_path_to_error::Path;
 
 use crate::AuthError;
 
@@ -6,10 +7,9 @@ use crate::AuthError;
 pub enum Error {
     #[error(transparent)]
     Request(#[from] reqwest::Error),
-    #[error("{error:?}\ndeserialization text:\n{text}")]
+    #[error("{error}")]
     Deserialization {
-        error: serde_json::Error,
-        text: String,
+        error: serde_path_to_error::Error<serde_json::Error>,
     },
     #[error(transparent)]
     AuthError(#[from] AuthError),

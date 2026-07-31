@@ -22,27 +22,30 @@ pub fn PlayerScores(player: objects::Player) -> impl IntoElement {
     let theme = use_theme();
     let scores_query = use_query(Query::new(player.id.clone(), FetchPlayerScores));
 
-    Card::new().child(
-        rect()
-            .spacing(20.0)
-            .width(percent(90))
-            .max_width(px(800))
-            .content(Content::Fit)
-            .map(scores_query.read().state().ok(), |el, scores| {
-                el.children(
-                    scores
-                        .iter()
-                        .map(|score| PlayerScore::new(score.clone()).into_element())
-                        .intersperse(
-                            rect()
-                                .width(Size::fill_minimum())
-                                .height(px(4))
-                                .background(theme.read().colors.background)
-                                .into_element(),
-                        ),
-                )
-            }),
-    )
+    unquery(scores_query)
+        .map_ok(move |scores| {
+            Card::new().child(
+                rect()
+                    .spacing(20.0)
+                    .width(percent(90))
+                    .max_width(px(800))
+                    .content(Content::Fit)
+                    .children(
+                        scores
+                            .iter()
+                            .map(|score| PlayerScore::new(score.clone()).into_element())
+                            .intersperse(
+                                rect()
+                                    .width(Size::fill_minimum())
+                                    .height(px(4))
+                                    .background(theme.read().colors.background)
+                                    .into_element(),
+                            ),
+                    ),
+            )
+        })
+        .map_err(|err| Card::new().child(label().text(format!("{}", err))))
+        .unwrap_or(Card::new().child(label().text("loading...")))
 }
 
 #[component]

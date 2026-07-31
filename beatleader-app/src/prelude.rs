@@ -4,9 +4,11 @@ pub use crate::{AppState, PageSelected};
 pub use beatleader_api::{
     BlApi, objects, objects::LeaderboardId, objects::PlayerId, objects::ScoreId, objects::SongId,
 };
+use bon::builder;
 pub use freya::icons::*;
 pub use freya::prelude::*;
 pub use freya::query::*;
+use log::error;
 pub use macros::*;
 use num_traits::AsPrimitive;
 pub use rustc_hash::FxHashMap;
@@ -58,5 +60,104 @@ impl LuminenceExt for Color {
         let b = rgb.b;
 
         0.2126 * (r as f32 / 255.0) + 0.7152 * (g as f32 / 255.0) + 0.0722 * (b as f32 / 255.0)
+    }
+}
+
+#[builder(finish_fn(name = call_inner, vis = "pub(self)"), state_mod(vis = "pub(self)"))]
+pub fn unquery<'a, 'b, 'c, Q: QueryCapability, E: IntoElement>(
+    #[builder(start_fn)] query: UseQuery<Q>,
+
+    ///
+    #[builder(setters(name = default_inner, vis = "pub(self)"))]
+    default: Box<dyn FnOnce() -> E + 'a>,
+
+    ///
+    #[builder(with = |map_ok: impl FnOnce(&Q::Ok) -> E + 'b| Box::new(map_ok))]
+    map_ok: Box<dyn FnOnce(&Q::Ok) -> E + 'b>,
+
+    ///
+    #[builder(with = |map_err: impl FnOnce(&Q::Err) -> E + 'c| Box::new(map_err))]
+    map_err: Option<Box<dyn FnOnce(&Q::Err) -> E + 'c>>,
+) -> Element
+where
+    Q::Err: std::error::Error,
+{
+    match &*query.read().state() {
+        QueryStateData::Pending => default().into_element(),
+        QueryStateData::Loading { res: None } => default().into_element(),
+        QueryStateData::Loading { res: Some(Ok(res)) } => map_ok(res).into_element(),
+        QueryStateData::Loading {
+            res: Some(Err(err)),
+        } => {
+            error!("query error: {}", err);
+            if let Some(map_err) = map_err {
+                map_err(err).into_element()
+            } else {
+                label().text("an error has occured").into_element()
+            }
+        }
+        QueryStateData::Settled {
+            res: Ok(res),
+            settlement_instant,
+        } => map_ok(res).into_element(),
+        QueryStateData::Settled {
+            res: Err(err),
+            settlement_instant,
+        } => {
+            error!("query error: {}", err);
+            if let Some(map_err) = map_err {
+                map_err(err).into_element()
+            } else {
+                label().text("an error has occured").into_element()
+            }
+        }
+    }
+}
+
+impl<'a, 'b, 'c, Q: QueryCapability, E: IntoElement + Default, S: unquery_builder::State>
+    UnqueryBuilder<'a, 'b, 'c, Q, E, S>
+where
+    Q::Err: std::error::Error,
+{
+    pub fn unwrap_or_default(self) -> Element
+    where
+        S::Default: unquery_builder::IsUnset,
+        S::MapOk: unquery_builder::IsSet,
+    {
+        self.default_inner(Box::new(|| E::default())).call_inner()
+    }
+}
+
+impl<'a, 'b, 'c, Q: QueryCapability, E: IntoElement, S: unquery_builder::State>
+    UnqueryBuilder<'a, 'b, 'c, Q, E, S>
+where
+    Q::Err: std::error::Error,
+{
+    pub fn unwrap_or(self, v: E) -> Element
+    where
+        S::Default: unquery_builder::IsUnset,
+        S::MapOk: unquery_builder::IsSet,
+    {
+        self.default_inner(Box::new(move || v)).call_inner()
+    }
+
+    pub fn unwrap_or_else(self, or_else: impl FnOnce() -> E + 'a) -> Element
+    where
+        S::Default: unquery_builder::IsUnset,
+        S::MapOk: unquery_builder::IsSet,
+    {
+        self.default_inner(Box::new(or_else)).call_inner()
+    }
+}
+
+impl<'a, 'b, 'c, Q: QueryCapability, E: IntoElement + Default, S: unquery_builder::State>
+    IntoElement for UnqueryBuilder<'a, 'b, 'c, Q, E, S>
+where
+    S::Default: unquery_builder::IsUnset,
+    S::MapOk: unquery_builder::IsSet,
+    Q::Err: std::error::Error,
+{
+    fn into_element(self) -> Element {
+        self.unwrap_or_default()
     }
 }

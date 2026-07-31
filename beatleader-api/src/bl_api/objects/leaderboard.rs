@@ -11,3 +11,11 @@ pub struct Leaderboard {
     pub difficulty: Difficulty,
     pub scores: Vec<PartialScore>,
 }
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PartialLeaderboard {
+    pub id: LeaderboardId,
+    pub song: Song,
+    pub difficulty: Difficulty,
+}

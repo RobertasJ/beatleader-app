@@ -1,4 +1,6 @@
-use crate::objects::{Leaderboard, ScoreId, difficulty::Difficulty, helpers::Pp, song::Song};
+use crate::objects::{
+    Leaderboard, PartialLeaderboard, ScoreId, difficulty::Difficulty, helpers::Pp, song::Song,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -8,8 +10,6 @@ pub struct PartialScore {
     pub accuracy: f32,
     pub pp: Pp,
     pub rank: u32,
-    pub song: Song,
-    pub difficulty: Difficulty,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -17,9 +17,7 @@ pub struct PartialScore {
 pub struct Score {
     pub id: ScoreId,
     pub accuracy: f32,
-    pub leaderboard: Leaderboard,
+    pub leaderboard: PartialLeaderboard,
     pub pp: Pp,
     pub rank: u32,
-    pub song: Song,
-    pub difficulty: Difficulty,
 }
