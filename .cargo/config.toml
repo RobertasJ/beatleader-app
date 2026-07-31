@@ -1,0 +1,3 @@
+[env]
+# lets be real this is an open secret, nobody cares if its leaked nor can you make sure its not leaked
+OAUTH2_SECRET = "0869d930-bf4e-4c41-b06c-23f2817ca4f8"
