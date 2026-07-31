@@ -1,0 +1,20 @@
+[package]
+name = "beatleader-api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { workspace = true }
+reqwest.workspace = true
+oauth2 = "5.0.0"
+serde = { workspace = true }
+serde_json = { workspace = true }
+log = { workspace = true }
+webbrowser = "1.0.4"
+serde_repr = "0.1.20"
+directories = { workspace = true }
+thiserror.workspace = true
+serde_with = "3.21.0"
+keyring.workspace = true
+moka.workspace = true
+beatleader-auth = { workspace = true }

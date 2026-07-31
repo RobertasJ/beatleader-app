@@ -1,0 +1,11 @@
+[package]
+name = "beatleader-auth"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+oauth2 = "5.0.0"
+reqwest = { workspace = true }
+tokio = { workspace = true }
+webbrowser = "1.0.4"
+thiserror.workspace = true

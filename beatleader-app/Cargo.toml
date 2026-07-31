@@ -1,0 +1,25 @@
+[package]
+name = "beatleader-app"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = { workspace = true }
+freya = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+dioxus-switch = "0.1.1"
+log = { workspace = true }
+beatleader-api = { path = "../beatleader-api" }
+directories = { workspace = true }
+env_logger = "0.11.8"
+bon = { version = "3.9" }
+num-traits = "0.2.19"
+macros.workspace = true
+reqwest.workspace = true
+rustc-hash = "2.1.3"
+
+[features]
+hotreload = ["freya/hotreload"]
+devtools = ["freya/devtools"]
