@@ -5,20 +5,19 @@ use crate::prelude::*;
 pub fn PlayerPage(id: PlayerId) -> impl IntoElement {
     let player_query = use_query(Query::new(id, FetchPlayer));
 
-    rect()
-        .padding(50.0)
-        .width(fill())
-        .spacing(50.0)
-        .cross_align(Alignment::Center)
-        .map(player_query.read().state().ok(), |el, player| {
-            el.child(PlayerCard::new(player.clone()))
+    unquery(player_query)
+        .map_ok(|player| {
+            PageContainer::new()
+                .child(PlayerCard::new(player.clone()))
                 .child(PlayerScores::new(player.clone()))
+                .build()
         })
+        .unwrap_or_default()
 }
 
 #[component]
 #[derive(PartialEq)]
-pub fn PlayerScores(player: objects::Player) -> impl IntoElement {
+pub fn PlayerScores(player: objects::player_api::Player) -> impl IntoElement {
     let theme = use_theme();
     let scores_query = use_query(Query::new(player.id.clone(), FetchPlayerScores));
 
@@ -27,8 +26,8 @@ pub fn PlayerScores(player: objects::Player) -> impl IntoElement {
             Card::new().child(
                 rect()
                     .spacing(20.0)
-                    .width(percent(90))
-                    .max_width(px(800))
+                    .width(90.percent())
+                    .max_width(800.px())
                     .content(Content::Fit)
                     .children(
                         scores
@@ -37,7 +36,7 @@ pub fn PlayerScores(player: objects::Player) -> impl IntoElement {
                             .intersperse(
                                 rect()
                                     .width(Size::fill_minimum())
-                                    .height(px(4))
+                                    .height(4.px())
                                     .background(theme.read().colors.background)
                                     .into_element(),
                             ),
@@ -50,7 +49,7 @@ pub fn PlayerScores(player: objects::Player) -> impl IntoElement {
 
 #[component]
 #[derive(PartialEq)]
-pub fn PlayerScore(score: objects::Score) -> impl IntoElement {
+pub fn PlayerScore(score: objects::scores_api::Score) -> impl IntoElement {
     let theme = use_theme().read();
     let mut app_state = use_consume::<State<AppState>>();
 
@@ -58,26 +57,26 @@ pub fn PlayerScore(score: objects::Score) -> impl IntoElement {
         .rounded_lg()
         .cursor_icon(CursorIcon::Pointer)
         .hover_background(theme.colors.surface_secondary)
-        .width(fill())
+        .width(Fill)
         .padding(5.0)
         .child(
             rect()
                 .content(Content::Flex)
                 .main_align(Alignment::SpaceBetween)
-                .direction(Direction::Horizontal)
-                .width(percent(100))
+                .direction(Horizontal)
+                .width(100.percent())
                 .spacing(50.0)
                 .child(
                     rect()
                         .width(Size::flex(5.0))
-                        .direction(Direction::Horizontal)
+                        .direction(Horizontal)
                         .spacing(20.0)
                         .child(
                             rect()
                                 .child(
                                     Icon::new(score.leaderboard.song.cover)
-                                        .width(px(100))
-                                        .height(px(100))
+                                        .width(100.px())
+                                        .height(100.px())
                                         .rounded_lg(),
                                 )
                                 .child(
@@ -135,11 +134,18 @@ pub fn PlayerScore(score: objects::Score) -> impl IntoElement {
                                         .child(paragraph().span(score.leaderboard.song.author)),
                                 )
                                 .child(
-                                    container().hover_color(theme.colors.text_highlight).child(
-                                        paragraph()
-                                            .font_size(em(0.8))
-                                            .span(score.leaderboard.song.mapper),
-                                    ),
+                                    container()
+                                        .color(
+                                            theme.colors.text_primary.with_a((0.5 * 255.0) as u8),
+                                        )
+                                        .hover_color(
+                                            theme.colors.text_highlight.with_a((0.5 * 255.0) as u8),
+                                        )
+                                        .child(
+                                            paragraph()
+                                                .font_size(0.8.em())
+                                                .span(score.leaderboard.song.mapper),
+                                        ),
                                 ),
                         ),
                 )

@@ -1,11 +1,8 @@
 use std::ops::{Deref, DerefMut};
 
-use reqwest::Url;
 use serde::{Deserialize, Serialize};
 
-use crate::objects::{
-    LeaderboardId, ScoreId, SongId, difficulty, helpers::Pp, score::Score, song::Song,
-};
+use crate::objects::common::{Difficulty, LeaderboardId, Pp, ScoreId, Song};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -30,8 +27,18 @@ impl DerefMut for Scores {
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ScoreLeaderBoard {
+pub struct Score {
+    pub id: ScoreId,
+    pub accuracy: f32,
+    pub leaderboard: Leaderboard,
+    pub pp: Pp,
+    pub rank: u32,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Leaderboard {
     pub id: LeaderboardId,
     pub song: Song,
-    pub difficulty: difficulty::Difficulty,
+    pub difficulty: Difficulty,
 }

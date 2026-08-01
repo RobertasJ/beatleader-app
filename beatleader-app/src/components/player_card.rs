@@ -3,7 +3,7 @@ use crate::prelude::*;
 #[component(bon, container_ext)]
 #[derive(PartialEq)]
 pub fn PlayerCard(
-    #[builder(start_fn)] player: objects::Player,
+    #[builder(start_fn)] player: objects::player_api::Player,
     #[builder(field)]
     #[component(layout)]
     layout: LayoutData,
@@ -24,16 +24,16 @@ pub fn PlayerCard(
                 .spacing(20.0)
                 .child(
                     rect()
-                        .cross_align(Alignment::Center)
+                        .cross_align(Center)
                         .spacing(20.0)
-                        .direction(Direction::Horizontal)
+                        .direction(Horizontal)
                         .child(
                             Icon::new(player.avatar)
-                                .width(px(50))
-                                .height(px(50))
+                                .width(50.px())
+                                .height(50.px())
                                 .rounded_lg(),
                         )
-                        .child(paragraph().font_size(em(1.5)).span(player.name)),
+                        .child(paragraph().font_size(1.5.em()).span(player.name)),
                 )
                 .child(
                     rect()

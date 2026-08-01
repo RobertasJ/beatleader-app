@@ -1,7 +1,6 @@
-use reqwest::Url;
 use serde::{Deserialize, Serialize};
 
-use crate::objects::PlayerId;
+use crate::objects::common::PlayerId;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

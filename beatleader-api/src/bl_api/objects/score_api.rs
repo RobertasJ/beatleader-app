@@ -1,20 +1,20 @@
-use reqwest::Url;
 use serde::{Deserialize, Serialize};
 
-use crate::objects::{LeaderboardId, difficulty::Difficulty, score::PartialScore, song::Song};
+use crate::objects::common::{Difficulty, LeaderboardId, Pp, ScoreId, Song};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Leaderboard {
-    pub id: LeaderboardId,
-    pub song: Song,
-    pub difficulty: Difficulty,
-    pub scores: Vec<PartialScore>,
+pub struct Score {
+    pub id: ScoreId,
+    pub accuracy: f32,
+    pub leaderboard: Leaderboard,
+    pub pp: Pp,
+    pub rank: u32,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PartialLeaderboard {
+pub struct Leaderboard {
     pub id: LeaderboardId,
     pub song: Song,
     pub difficulty: Difficulty,

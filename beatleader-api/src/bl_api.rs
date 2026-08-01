@@ -1,6 +1,9 @@
 use log::{debug, trace};
 use oauth2::AccessToken;
-use objects::*;
+use objects::common::{Identity, LeaderboardId, PlayerId, ScoreId};
+use objects::{
+    leaderboard_api::Leaderboard, player_api::Player, score_api::Score, scores_api::Scores,
+};
 use reqwest::{Client, IntoUrl, Method, RequestBuilder};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
@@ -101,7 +104,7 @@ impl BlApi {
         Self::send_api(Method::GET, api!("/player/{id}/scores")).await
     }
 
-    pub async fn score(ScoreId(id): &ScoreId) -> Result<PartialScore> {
+    pub async fn score(ScoreId(id): &ScoreId) -> Result<Score> {
         Self::send_api(Method::GET, api!("/score/{id}")).await
     }
 

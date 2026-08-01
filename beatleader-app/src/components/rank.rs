@@ -6,7 +6,7 @@ pub fn Rank(#[builder(start_fn)] rank: u64, country_rank: Option<String>) -> imp
     let theme = use_theme().read();
 
     container()
-        .background(theme.colors.surface_primary)
+        .background(theme.colors.surface_secondary)
         .rounded()
         .cursor_icon(CursorIcon::Pointer)
         .padding(Gaps::new_symmetric(2.0, 5.0))

@@ -24,7 +24,7 @@ impl QueryCapability for FetchImage {
 pub struct FetchPlayer;
 
 impl QueryCapability for FetchPlayer {
-    type Ok = objects::Player;
+    type Ok = objects::player_api::Player;
 
     type Err = beatleader_api::Error;
 
@@ -39,7 +39,7 @@ impl QueryCapability for FetchPlayer {
 pub struct FetchCurrentPlayer;
 
 impl QueryCapability for FetchCurrentPlayer {
-    type Ok = objects::Player;
+    type Ok = objects::player_api::Player;
 
     type Err = beatleader_api::Error;
 
@@ -55,7 +55,7 @@ impl QueryCapability for FetchCurrentPlayer {
 pub struct FetchPlayerScores;
 
 impl QueryCapability for FetchPlayerScores {
-    type Ok = objects::Scores;
+    type Ok = objects::scores_api::Scores;
 
     type Err = beatleader_api::Error;
 
@@ -70,7 +70,7 @@ impl QueryCapability for FetchPlayerScores {
 pub struct FetchLeaderboard;
 
 impl QueryCapability for FetchLeaderboard {
-    type Ok = objects::Leaderboard;
+    type Ok = objects::leaderboard_api::Leaderboard;
 
     type Err = beatleader_api::Error;
 

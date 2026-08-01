@@ -2,7 +2,8 @@ pub use crate::components::*;
 pub use crate::queries::*;
 pub use crate::{AppState, PageSelected};
 pub use beatleader_api::{
-    BlApi, objects, objects::LeaderboardId, objects::PlayerId, objects::ScoreId, objects::SongId,
+    BlApi, objects,
+    objects::common::{LeaderboardId, PlayerId, ScoreId, SongId},
 };
 use bon::builder;
 pub use freya::icons::*;
@@ -13,23 +14,41 @@ pub use macros::*;
 use num_traits::AsPrimitive;
 pub use rustc_hash::FxHashMap;
 
-pub fn px(px: impl AsPrimitive<f32>) -> Size {
-    Size::px(px.as_())
-}
-
-pub fn percent(percent: impl AsPrimitive<f32>) -> Size {
-    Size::percent(percent.as_())
-}
-
-pub fn fill() -> Size {
-    Size::Fill
-}
-
-pub fn em(em: impl AsPrimitive<f32>) -> FontSize {
-    (16.0 * em.as_()).into()
-}
 pub fn container() -> ContainerBuilder {
     Container::new()
+}
+
+pub use Direction::*;
+pub use Size::{Fill, FillMinimum, Inner};
+
+pub trait SizeHelper {
+    fn px(self) -> Size;
+    fn percent(self) -> Size;
+    fn flex(self) -> Size;
+    fn window_percent(self) -> Size;
+    fn em(self) -> f32;
+}
+
+impl<T: AsPrimitive<f32>> SizeHelper for T {
+    fn px(self) -> Size {
+        Size::px(self.as_())
+    }
+
+    fn percent(self) -> Size {
+        Size::percent(self.as_())
+    }
+
+    fn flex(self) -> Size {
+        Size::flex(self.as_())
+    }
+
+    fn window_percent(self) -> Size {
+        Size::window_percent(self.as_())
+    }
+
+    fn em(self) -> f32 {
+        16.0 * self.as_()
+    }
 }
 
 pub struct Center;
@@ -37,6 +56,12 @@ pub struct Center;
 impl From<Center> for TextAlign {
     fn from(value: Center) -> Self {
         TextAlign::Center
+    }
+}
+
+impl From<Center> for Alignment {
+    fn from(value: Center) -> Self {
+        Alignment::Center
     }
 }
 

@@ -44,8 +44,8 @@ fn App() -> impl IntoElement {
                 }
             }
         })
-        .width(percent(100))
-        .height(percent(100))
+        .width(100.percent())
+        .height(100.percent())
         .theme_background()
         .child(
             ScrollView::new()

@@ -9,21 +9,15 @@ pub fn WelcomePage() -> impl IntoElement {
 
     unquery(curr_player_query)
         .map_ok(|player| {
-            rect()
-                .width(fill())
-                .cross_align(Alignment::Center)
-                .spacing(30.0)
+            PageContainer::new()
                 .child(
                     rect()
                         .cross_align(Alignment::Center)
                         .child(H1::new().span(format!("Welcome {}", player.name)))
                         .child(label().text("Today is a nice day to browse Beat Leader!")),
                 )
-                .child(
-                    PlayerCard::new(player.clone())
-                        .width(percent(40))
-                        .height(px(300)),
-                )
+                .child(PlayerCard::new(player.clone()))
+                .build()
         })
-        .unwrap_or(rect())
+        .unwrap_or_default()
 }
