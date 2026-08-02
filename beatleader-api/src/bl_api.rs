@@ -1,9 +1,7 @@
 use log::{debug, trace};
 use oauth2::AccessToken;
-use objects::common::{Identity, LeaderboardId, PlayerId, ScoreId};
-use objects::{
-    leaderboard_api::Leaderboard, player_api::Player, score_api::Score, scores_api::Scores,
-};
+use objects::common::*;
+use objects::{identity_api, leaderboard_api, player_api, score_api, scores_api};
 use reqwest::{Client, IntoUrl, Method, RequestBuilder};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
@@ -96,15 +94,15 @@ impl BlApi {
         Ok(res)
     }
 
-    pub async fn identity() -> Result<Identity> {
+    pub async fn identity() -> Result<identity_api::Identity> {
         Self::send_api_authed(Method::GET, api!("/oauth2/identity")).await
     }
 
-    pub async fn player_scores(PlayerId(id): &PlayerId) -> Result<Scores> {
+    pub async fn player_scores(PlayerId(id): &PlayerId) -> Result<scores_api::Scores> {
         Self::send_api(Method::GET, api!("/player/{id}/scores")).await
     }
 
-    pub async fn score(ScoreId(id): &ScoreId) -> Result<Score> {
+    pub async fn score(ScoreId(id): &ScoreId) -> Result<score_api::Score> {
         Self::send_api(Method::GET, api!("/score/{id}")).await
     }
 
@@ -114,11 +112,13 @@ impl BlApi {
         Ok(bytes.to_vec())
     }
 
-    pub async fn player(PlayerId(id): &PlayerId) -> Result<Player> {
+    pub async fn player(PlayerId(id): &PlayerId) -> Result<player_api::Player> {
         Self::send_api(Method::GET, api!("/player/{id}")).await
     }
 
-    pub async fn leaderboard(LeaderboardId(id): &LeaderboardId) -> Result<Leaderboard> {
+    pub async fn leaderboard(
+        LeaderboardId(id): &LeaderboardId,
+    ) -> Result<leaderboard_api::Leaderboard> {
         Self::send_api(Method::GET, api!("/leaderboard/{id}")).await
     }
 }

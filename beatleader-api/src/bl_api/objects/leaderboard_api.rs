@@ -1,8 +1,22 @@
-use reqwest::Url;
-use serde::{Deserialize, Serialize};
-use serde_repr::{Deserialize_repr, Serialize_repr};
+use super::*;
 
-use crate::objects::common::{LeaderboardId, Pp, ScoreId};
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Leaderboard {
+    pub id: LeaderboardId,
+    pub song: Song,
+    pub difficulty: Difficulty,
+    pub scores: Vec<Score>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Score {
+    pub id: ScoreId,
+    pub accuracy: f32,
+    pub pp: Pp,
+    pub rank: u32,
+}
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -42,22 +56,4 @@ impl DifficultyType {
             DifficultyType::ExpertPlus => "#8f48db",
         }
     }
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Leaderboard {
-    pub id: LeaderboardId,
-    pub song: Song,
-    pub difficulty: Difficulty,
-    pub scores: Vec<Score>,
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Score {
-    pub id: ScoreId,
-    pub accuracy: f32,
-    pub pp: Pp,
-    pub rank: u32,
 }

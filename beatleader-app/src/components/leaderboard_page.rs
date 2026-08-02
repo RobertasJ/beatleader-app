@@ -32,3 +32,9 @@ pub fn SongCard(song: objects::leaderboard_api::Song) -> impl IntoElement {
             ),
     )
 }
+
+#[component]
+#[derive(PartialEq)]
+pub fn LeaberboardScores() -> impl IntoElement {
+    Card::new()
+}

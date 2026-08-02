@@ -1,8 +1,4 @@
-use reqwest::Url;
-use serde::{Deserialize, Serialize};
-use serde_repr::{Deserialize_repr, Serialize_repr};
-
-use crate::objects::common::{LeaderboardId, Pp, ScoreId};
+use super::*;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

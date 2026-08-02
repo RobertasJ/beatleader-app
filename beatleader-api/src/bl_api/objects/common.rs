@@ -1,12 +1,4 @@
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use std::ops::Deref;
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Identity {
-    pub id: PlayerId,
-    pub name: String,
-}
+use super::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Hash)]
 pub struct ScoreId(pub(crate) i32);
