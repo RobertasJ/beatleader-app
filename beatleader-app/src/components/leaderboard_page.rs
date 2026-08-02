@@ -16,7 +16,7 @@ pub fn LeaderboardPage(id: LeaderboardId) -> impl IntoElement {
 
 #[component]
 #[derive(PartialEq)]
-pub fn SongCard(song: objects::common::Song) -> impl IntoElement {
+pub fn SongCard(song: objects::leaderboard_api::Song) -> impl IntoElement {
     Card::new().child(
         ///
         rect()
