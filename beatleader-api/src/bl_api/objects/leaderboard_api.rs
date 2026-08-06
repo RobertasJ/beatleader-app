@@ -5,7 +5,7 @@ use super::*;
 pub struct Leaderboard {
     pub id: LeaderboardId,
     pub song: Song,
-    pub difficulty: Difficulty,
+    pub difficulty: LeaderboardDifficulty,
     pub scores: Vec<Score>,
 }
 
@@ -16,6 +16,7 @@ pub struct Score {
     pub accuracy: f32,
     pub pp: Pp,
     pub rank: u32,
+    pub player: Player,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -27,33 +28,32 @@ pub struct Song {
     pub mapper: String,
     #[serde(alias = "coverImage")]
     pub cover: Url,
+    pub difficulties: Vec<SongDifficulty>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Difficulty {
+pub struct SongDifficulty {
+    pub mode: i32,
     pub value: DifficultyType,
+    pub stars: Option<f32>,
+    pub difficulty_name: String,
+    pub song_id: SongId,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LeaderboardDifficulty {
+    pub value: DifficultyType,
+    pub difficulty_name: String,
     pub stars: Option<f32>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
-#[repr(i32)]
-pub enum DifficultyType {
-    Easy = 1,
-    Normal = 3,
-    Hard = 5,
-    Expert = 7,
-    ExpertPlus = 9,
-}
-
-impl DifficultyType {
-    pub fn color_hex(&self) -> &'static str {
-        match self {
-            DifficultyType::Easy => "#3CB371",
-            DifficultyType::Normal => "#59b0ff",
-            DifficultyType::Hard => "#ff6347",
-            DifficultyType::Expert => "#bf2a42",
-            DifficultyType::ExpertPlus => "#8f48db",
-        }
-    }
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Player {
+    pub id: PlayerId,
+    pub name: String,
+    pub country: String,
+    pub avatar: Url,
 }

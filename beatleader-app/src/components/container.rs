@@ -64,13 +64,6 @@ pub fn Container(
     });
 
     let mut comp = freya::prelude::rect()
-        .a11y_role(
-            if event_handlers.contains_key(&name::EventName::PointerDown) {
-                AccessibilityRole::Button
-            } else {
-                AccessibilityRole::Group
-            },
-        )
         .event_handlers(event_handlers)
         .layout(layout)
         .accessibility(accessibility)

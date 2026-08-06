@@ -20,12 +20,12 @@ macro_rules! header_component {
             #[builder(field)]
             #[component(text_style)]
             text_style_data: TextStyleData,
-            // #[builder(field)]
-            // #[component(layer)]
-            // relative_layer: Layer,
-            // #[builder(field)]
-            // #[component(event_handlers)]
-            // event_handlers: EventHandlers,
+            #[builder(field)]
+            #[component(layer)]
+            relative_layer: Layer,
+            #[builder(field)]
+            #[component(event_handlers)]
+            event_handlers: EventHandlers,
             #[builder(field)] spans: Vec<Span<'static>>,
 
             #[builder(default)] selectable: bool,
@@ -41,8 +41,8 @@ macro_rules! header_component {
                     .layout(layout)
                     .text_style(text_style_data)
                     .font_size($size)
-                    // .layer(relative_layer)
-                    // .event_handlers(event_handlers)
+                    .layer(relative_layer)
+                    .event_handlers(event_handlers)
                     .a11y_role(AccessibilityRole::Header)
                     .into_element()
             } else {
@@ -51,8 +51,8 @@ macro_rules! header_component {
                     .layout(layout)
                     .text_style(text_style_data)
                     .font_size($size)
-                    // .layer(relative_layer)
-                    // .event_handlers(event_handlers)
+                    .layer(relative_layer)
+                    .event_handlers(event_handlers)
                     .a11y_role(AccessibilityRole::Header)
                     .into_element()
             }
@@ -103,8 +103,8 @@ pub fn Text(
         selectable_text
             .layout(layout)
             .text_style(text_style_data)
-            // .layer(relative_layer)
-            // .event_handlers(event_handlers)
+            .layer(relative_layer)
+            .event_handlers(event_handlers)
             .a11y_role(AccessibilityRole::Paragraph)
             .into_element()
     } else {
@@ -112,8 +112,8 @@ pub fn Text(
             .spans_iter(spans.into_iter())
             .layout(layout)
             .text_style(text_style_data)
-            // .layer(relative_layer)
-            // .event_handlers(event_handlers)
+            .layer(relative_layer)
+            .event_handlers(event_handlers)
             .a11y_role(AccessibilityRole::Paragraph)
             .into_element()
     }
