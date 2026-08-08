@@ -12,7 +12,6 @@ pub use freya::query::*;
 use log::error;
 pub use macros::*;
 use num_traits::AsPrimitive;
-pub use rustc_hash::FxHashMap;
 
 pub fn container() -> ContainerBuilder {
     Container::new()
